@@ -186,6 +186,9 @@ int DrmPlane::Init() {
   if (drm_->GetPlaneProperty(*this, "colormap", &colormap_))
       ALOGI("Could not get colormap property");
 
+  if (drm_->GetPlaneProperty(*this, "fod_layer", &fod_layer_))
+      ALOGI("Could not get fod_layer property");
+
   if (drm_->GetPlaneProperty(*this, "restrictions", &restrictions_))
       ALOGI("Could not get restrictions property");
 
@@ -214,6 +217,7 @@ int DrmPlane::Init() {
   properties_.push_back(&gammut_matrix_);
   properties_.push_back(&tone_mapping_);
   properties_.push_back(&colormap_);
+  properties_.push_back(&fod_layer_);
   properties_.push_back(&hdr_fd_);
   properties_.push_back(&virtual8k_split_);
   properties_.push_back(&restrictions_);
@@ -331,6 +335,10 @@ const DrmProperty &DrmPlane::tone_mapping_property() const {
 
 const DrmProperty &DrmPlane::colormap_property() const {
   return colormap_;
+}
+
+const DrmProperty &DrmPlane::fod_layer_property() const {
+  return fod_layer_;
 }
 
 const DrmProperty &DrmPlane::hdr_fd_property() const {

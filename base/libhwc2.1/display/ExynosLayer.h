@@ -187,6 +187,11 @@ class ExynosLayer : public ExynosMPPSource {
     uint32_t mZOrder;
 
     /**
+         * FOD pressed
+         */
+    bool mFodPressed = false;
+
+    /**
          * Color
          */
     hwc_color_t mColor;
