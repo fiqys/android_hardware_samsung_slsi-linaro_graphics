@@ -472,6 +472,15 @@ int32_t ExynosLayer::setLayerVisibleRegion(hwc_region_t visible) {
 }
 
 int32_t ExynosLayer::setLayerZOrder(uint32_t z, uint64_t &geometryFlag) {
+#if defined(HAS_FINGERPRINT_MASK_LAYER) && defined(UDFPS_PRESSED_LAYER_ZORDER) && !defined(UDFPS_DIM_LAYER_ZORDER)
+    const bool fodPressed = z & UDFPS_PRESSED_LAYER_ZORDER;
+
+    z &= ~UDFPS_PRESSED_LAYER_ZORDER;
+    if (mFodPressed != fodPressed) {
+        mFodPressed = fodPressed;
+        setGeometryChanged(GEOMETRY_LAYER_ZORDER_CHANGED, geometryFlag);
+    }
+#endif
     if (mZOrder != z) {
         setGeometryChanged(GEOMETRY_LAYER_ZORDER_CHANGED, geometryFlag);
         mZOrder = z;

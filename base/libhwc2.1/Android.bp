@@ -173,7 +173,10 @@ cc_library_shared {
 
     cflags: [
         "-DLOG_TAG=\"hwc-display\"",
-    ] + select(soong_config_variable("samsungUdfpsVars", "dim_layer_zorder"), {
+    ] + select(soong_config_variable("samsungUdfpsVars", "udfps_zorder"), {
+        any @ zorder: ["-DUDFPS_PRESSED_LAYER_ZORDER=" + zorder],
+        default: [],
+    }) + select(soong_config_variable("samsungUdfpsVars", "dim_layer_zorder"), {
         any @ dim_layer_zorder: ["-DUDFPS_DIM_LAYER_ZORDER=" + dim_layer_zorder],
         default: [],
     }) + select(soong_config_variable("openmax", "USE_FULL_ST2094_40"), {

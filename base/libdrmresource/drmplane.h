@@ -68,6 +68,7 @@ class DrmPlane {
   const DrmProperty &gammut_matrix_property() const;
   const DrmProperty &tone_mapping_property() const;
   const DrmProperty &colormap_property() const;
+  const DrmProperty &fod_layer_property() const;
   const DrmProperty &hdr_fd_property() const;
   const DrmProperty &virtual8k_split_property() const;
 
@@ -111,6 +112,7 @@ class DrmPlane {
   DrmProperty gammut_matrix_;
   DrmProperty tone_mapping_;
   DrmProperty colormap_;
+  DrmProperty fod_layer_;
   DrmProperty hdr_fd_;
   DrmProperty virtual8k_split_;
 
