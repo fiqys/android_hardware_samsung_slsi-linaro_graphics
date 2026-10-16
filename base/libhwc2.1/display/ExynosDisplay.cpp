@@ -1919,7 +1919,23 @@ int ExynosDisplay::deliverWinConfigData(DevicePresentInfo &presentInfo) {
 #endif
         ret = 0;
     } else {
-#if defined(HAS_FINGERPRINT_MASK_LAYER) && defined(UDFPS_DIM_LAYER_ZORDER)
+#if defined(HAS_FINGERPRINT_MASK_LAYER) && defined(UDFPS_PRESSED_LAYER_ZORDER) && !defined(UDFPS_DIM_LAYER_ZORDER)
+        for (size_t i = mLayers.size(); i-- > 0; ) {
+            if (!mLayers[i]->mFodPressed)
+                continue;
+
+            const int32_t winIdx = mLayers[i]->mWindowIndex;
+            if ((winIdx < 0) || (winIdx >= (int32_t)mDpuData.configs.size()))
+                continue;
+
+            exynos_win_config_data &fodConfig = mDpuData.configs[winIdx];
+            if (fodConfig.state == fodConfig.WIN_STATE_BUFFER) {
+                fodConfig.state = fodConfig.WIN_STATE_FINGERPRINT;
+                HDEBUGLOGD(eDebugWinConfig, "Sent UDFPS Mask layer command to DECON (win %d)", winIdx);
+                break;
+            }
+        }
+#elif defined(HAS_FINGERPRINT_MASK_LAYER) && defined(UDFPS_DIM_LAYER_ZORDER)
         for (size_t i = mLayers.size(); i-- > 0; ) {
             if (mLayers[i]->mZOrder == UDFPS_DIM_LAYER_ZORDER) {
                 for (size_t j = 0; j < mDpuData.configs.size(); j++) {

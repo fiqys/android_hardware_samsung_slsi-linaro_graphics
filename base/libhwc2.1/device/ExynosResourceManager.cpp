@@ -978,6 +978,13 @@ int32_t ExynosResourceManager::validateLayer(uint32_t index, ExynosDisplay *disp
 #endif
 
     if (layer->isDimLayer()) {
+#if defined(HAS_FINGERPRINT_MASK_LAYER) && defined(UDFPS_PRESSED_LAYER_ZORDER) && !defined(UDFPS_DIM_LAYER_ZORDER)
+        for (size_t i = 0; i < display->mLayers.size(); i++) {
+            if (display->mLayers[i]->mFodPressed) {
+                return eSkipLayer;
+            }
+        }
+#endif
         return eDimLayer;
     }
 

@@ -1038,6 +1038,19 @@ int32_t ExynosDisplayDrmInterface::setupCommitFromDisplayConfig(
         mFodCommitted = mFodPending;
     }
 
+#if defined(HAS_FINGERPRINT_MASK_LAYER) && defined(UDFPS_PRESSED_LAYER_ZORDER) && !defined(UDFPS_DIM_LAYER_ZORDER)
+    const DrmProperty &fodLayerProp = plane->fod_layer_property();
+    if (fodLayerProp.id()) {
+        const uint64_t isFod = (config.state == config.WIN_STATE_FINGERPRINT) ? 1 : 0;
+
+        ret = drmReq.atomicAddProperty(plane->id(), fodLayerProp, isFod, false);
+        if (ret < 0) {
+            HWC_LOGE(mDisplayIdentifier, "%s : Failed to set fod_layer property %d", __func__, ret);
+            return ret;
+        }
+    }
+#endif
+
     if ((ret = setEnumProperty(config.blending, mBlendEnums,
                                plane->blend_property()) < 0))
         return ret;
